@@ -15,15 +15,28 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-function sendMail(to, sub, text) {
+function feedbackMail(to, sub, text) {
   transporter.sendMail({
+    from: 'KnowledgeCube',
     to: to, // list of receivers
     subject: sub, // Subject line
     text: text, // plain text body
     html: `<p><b>Dear ${text}<b>,</p>
-          <p>Thank you for your message. One of our customer supports representative
+          <p>Thank you for your message requesting ${sub}. 
+            One of our customer supports representative
             would get back to you within 24 hours from now.</p> 
             Best Regards from KnowledgeCube.` // html body
+  });
+}
+function sendMail(from, to,  sub, name, message) {
+  transporter.sendMail({
+    from: from,
+    to: to, // list of receivers
+    subject: sub,
+    text: name, // Subject line
+    html: `<p><b>From</b>: ${name}</p>
+          <p><b>Email</b>: ${from}</p>
+          <pre>${message}</pre>`
   });
 }
 
@@ -145,7 +158,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     });
     if (mes) {
 
-      sendMail(`${email}, segsey4topplaces@gmail.com`, subject, name)
+      feedbackMail(`${email}`, subject, name)
+      sendMail(email, 'segsey4topplaces@gmail.com', subject, name, message)
       res.status(201).json({message:"Message sent successfully"});
     } else {
       res.status(400);
