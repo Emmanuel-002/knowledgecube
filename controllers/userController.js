@@ -145,7 +145,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     });
     if (mes) {
 
-      sendMail(email, subject, name)
+      sendMail(`${email}, segsey4topplaces@gmail.com`, subject, name)
       res.status(201).json({message:"Message sent successfully"});
     } else {
       res.status(400);
@@ -161,5 +161,3 @@ export {
   updateUserProfile,
   sendMessage,
 };
-
-
